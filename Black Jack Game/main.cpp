@@ -15,6 +15,7 @@ Proyecto Final
 #include <iostream>
 #include <time.h>
 #include <stdlib.h>
+#include <windows.h>
 
 using namespace std;
 
