@@ -27,6 +27,8 @@ void generarBaraja();
 void generarCartas();
 void reglasJuego();
 void startGame();
+void imprimirCartas();
+void primerTurno();
 
 int main()
 {
@@ -43,8 +45,9 @@ int main()
         {
             case 1:
                 cout<<"Se inicio la partida"<<endl;
-                generarBaraja();
-                startGame();
+                generarBaraja(); 
+                primerTurno();
+                //startGame();
 
 
                 break;
@@ -152,6 +155,95 @@ void startGame()
     cout<<"Casa"<<endl;
     cout<<"*******"<<endl;
 
-    cout<<"Puntos totales de Crupier"<< puntosCrupier(valueCart)<<endl;
+    cout<<"Puntos totales de Crupier"<< puntosCrupier(valueCart)<<endl
+}
 
+void imprimirCartas()
+{
+    if(carta[1]+1 == 1)
+    {
+        cout << "Ace";
+    }
+    else if(carta[1]+1 > 10)
+    {
+        switch(carta[1]+1)
+        {
+        case 11:
+            cout << "Jack";
+            break;
+        case 12:
+            cout << "Queen";
+            break;
+        case 13:
+            cout << "King";
+        }
+    }
+    else
+    {
+        cout << carta[1]+1;
+    }
+
+    switch(carta[0]+1)
+    {
+    case 1:
+        SetConsoleOutputCP(CP_UTF8);
+        printf("♥\n");
+        break;
+    case 2:
+        SetConsoleOutputCP(CP_UTF8);
+        printf("♦\n");
+        break;
+    case 3:
+        SetConsoleOutputCP(CP_UTF8);
+        printf("♣\n");
+        break;
+    case 4:
+        SetConsoleOutputCP(CP_UTF8);
+        printf("♠\n");
+        break;
+    }
+}
+void primerTurno()
+{
+    generarBaraja();
+    cout << "Crupier: " << endl;
+    generarCartas();
+    manoCrupier += carta[1]+1;
+    cout << "???, ";
+    generarCartas();
+    manoCrupier += carta[1]+1;
+    imprimirCartas();
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << endl;
+    cout << "Jugador: " << endl;
+    generarCartas();
+    if(carta[1]+1 > 10)
+    {
+        manoJugador += 10;
+    }
+    else
+    {
+        manoJugador += carta[1]+1;
+    }
+    imprimirCartas();
+    generarCartas();
+    if(carta[1]+1 > 10)
+    {
+        manoJugador += 10;
+    }
+    else
+    {
+        manoJugador += carta[1]+1;
+    }
+    imprimirCartas();
+    cout << "Total: " << manoJugador << endl;
 }
