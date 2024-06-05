@@ -1,75 +1,105 @@
-/*******************************************************************************
-            CESAR Gregorio Palma Venegas
-            Jorge Luis Leggis Romero
-        INGENIERIA DE SOFTWARE TM-A
-Creacion de juego de Black jack
-Proyecto Final
-    |||||||||||||
-    |           |
-    |   0   0   |
-    |           |
-    |   |---|   |
-    |           |
-    |||||||||||||
-*******************************************************************************/
-#include <iostream>
-#include <time.h>
-#include <stdlib.h>
-#include <windows.h>
+#include<iostream>
+#include<string.h>
+#include<ctime>
+#include<windows.h>
 
 using namespace std;
 
-int respuestaInicio, respuestaMenu;
 int baraja[4][13] = {};
-int manoCrupier = 0, manoJugador = 0;
-int valueCart=0;
+int carta[2] = {};
+int manoCrupier = 0, manoJugador = 0, valorAs = 0;
+bool hayAs = false;
 
 void generarBaraja();
 void generarCartas();
-void reglasJuego();
-void startGame();
 void imprimirCartas();
 void primerTurno();
 
 int main()
 {
-    do{
-        cout<<" Bienvenido a Black Jack!"<<endl;
-        cout<<"---------------------------"<<endl;
-        cout<<"[1]Partida Rapida"<<endl;
-        cout<<"[2]Reglamento"<<endl;
-        cout<<"[3]Salir del juego"<<endl;
-        cin>>respuestaInicio;
+    int valorAs = 0, plantarse = 0;
+    bool terminar = true, turnoJugador = true, ronda = true;
 
-
-        switch(respuestaInicio)
+    generarBaraja();
+    primerTurno();
+    do
+    {
+        if(turnoJugador == true)
         {
-            case 1:
-                cout<<"Se inicio la partida"<<endl;
-                generarBaraja(); 
-                primerTurno();
-                //startGame();
-
-
-                break;
-
-            case 2:
-                reglasJuego();
-                break;
-
-            case 3:
-                cout<<"*Saliste del juego*";
-                exit (0);
-                break;
-
+            do
+            {
+                cout << "¿Pides o te plantas? 1)Pedir 2)Plantarse" << endl;
+                cin >> plantarse;
+                switch(plantarse)
+                {
+                case 1:
+                    generarCartas();
+                    if(carta[1]+1 > 10)
+                    {
+                        manoJugador += 10;
+                    }
+                    else if(carta[1]+1 == 1)
+                    {
+                        cout << "Escoge el valor del As: 1 u 11";
+                        cin >> valorAs;
+                        switch(valorAs)
+                        {
+                        case 1:
+                            manoJugador += 1;
+                            cout << "Total: " << manoJugador << endl;
+                            break;
+                        case 11:
+                            manoJugador += 11;
+                            cout << "Total: " << manoJugador << endl;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        manoJugador += carta[1]+1;
+                    }
+                    imprimirCartas();
+                    cout << "Total: " << manoJugador << endl;
+                    break;
+                case 2:
+                     turnoJugador = false;
+                }
+            }
+            while(turnoJugador == true);
         }
 
-
-        cout<<"Quieres volver al menu? 1)MENU  2)SALIR"<<endl;
-        cin>>respuestaMenu;
-    }while(respuestaMenu==1);
-
-
+        if(turnoJugador == false)
+        {
+            generarCartas();
+            if(carta[1]+1 > 10)
+            {
+                manoCrupier += 10;
+            }
+            else if(carta[1]+1 == 1)
+            {
+                if((manoCrupier + 11) < 21)
+                {
+                    manoCrupier += 11;
+                }
+                else if((manoCrupier + 11) == 21)
+                {
+                    cout << "BlackJack" << endl;
+                    ronda = false;
+                }
+                else
+                {
+                    cout << "El Crupier se paso de 21" << endl;
+                    ronda = false;
+                }
+            }
+            else
+            {
+                manoCrupier += carta[1]+1;
+            }
+            imprimirCartas();
+        }
+    }
+    while(ronda == true);
 }
 
 void generarBaraja()
@@ -81,24 +111,11 @@ void generarBaraja()
             baraja[i][j] = 1;
         }
     }
-
-    cout << endl;
-    cout << endl;
-    cout << endl;
-    for(int i = 0; i < 4; i++)
-    {
-        for(int j = 0; j < 13; j++)
-        {
-            cout << "\t" << baraja[i][j];
-        }
-        cout << endl;
-        cout << endl;
-        cout << endl;
-    }
 }
 
 void generarCartas()
 {
+    srand(time(0));
     int x = 0, y = 0;
     bool seguir = true;
 
@@ -109,54 +126,13 @@ void generarCartas()
 
         if(baraja[y][x] != 0)
         {
+            carta[0] = y;
+            carta[1] = x;
             baraja[y][x] -=1;
             seguir = false;
         }
     }
     while(seguir == true);
-}
-void reglasJuego()
-{
-    cout<<"1. Inicio del Juego:"<<endl;
-    cout<<"    El crupier reparte dos cartas visibles a cada jugador, incluido él mismo."<<endl;
-    cout<<"    Una de las cartas del crupier está boca arriba (visible) y la otra boca abajo (oculta)."<<endl;
-    cout<<"2. Turno del Jugador:"<<endl;
-    cout<<"    El jugador decide si pide más cartas (""hit"") para acercarse a 21 o se planta (""stand"") con su mano actual."<<endl;
-    cout<<"    Si la suma de las cartas del jugador supera 21, pierde automáticamente (""busto"")."<<endl;
-    cout<<"    El As puede valer 1 u 11 puntos según la mano del jugador."<<endl;
-    cout<<"3. Turno del Crupier:"<<endl;
-    cout<<"    Después de que todos los jugadores hayan actuado, el crupier revela su carta oculta."<<endl;
-    cout<<"    El crupier debe seguir un conjunto de reglas preestablecidas, generalmente pedir cartas hasta alcanzar 17 o más."<<endl;
-    cout<<"4. Determinación del Ganador:"<<endl;
-    cout<<"    Si el jugador tiene una mano más cercana a 21 que el crupier sin pasarse, gana y recibe un pago."<<endl;
-    cout<<"    Si el crupier se pasa de 21 (""busto""), todos los jugadores que no se pasaron ganan automáticamente."<<endl;
-    cout<<"    Si la mano del jugador y la del crupier tienen el mismo valor, es un empate (""push"")."<<endl;
-}
-///se suman los puntos de el jugador
-int puntosPlayer(int valueCart)
-{
-    manoJugador+=valueCart;
-    return manoJugador;
-}
-///se suman los puntos del Crupier
-int puntosCrupier(int valueCart)
-{
-    manoCrupier+=valueCart;
-    return manoCrupier;
-}
-
-///funcion que inicia la partida
-void startGame()
-{
-    cout<<"Player"<<endl;
-    cout<<"*******"<<endl;
-
-    cout<<"Puntos totales de Player"<< puntosPlayer(valueCart)<<endl;
-
-    cout<<"Casa"<<endl;
-    cout<<"*******"<<endl;
-
-    cout<<"Puntos totales de Crupier"<< puntosCrupier(valueCart)<<endl
 }
 
 void imprimirCartas()
@@ -204,9 +180,9 @@ void imprimirCartas()
         break;
     }
 }
+
 void primerTurno()
 {
-    generarBaraja();
     cout << "Crupier: " << endl;
     generarCartas();
     manoCrupier += carta[1]+1;
@@ -231,20 +207,73 @@ void primerTurno()
     {
         manoJugador += 10;
     }
+    else if(carta[1]+1 == 1)
+    {
+        hayAs = true;
+    }
     else
     {
         manoJugador += carta[1]+1;
     }
     imprimirCartas();
     generarCartas();
-    if(carta[1]+1 > 10)
+    if(hayAs == true)
     {
-        manoJugador += 10;
+        imprimirCartas();
+        if(carta[1]+1 > 10)
+        {
+            manoJugador += 10;
+        }
+        else if(carta[1]+1 == 1)
+        {
+            manoJugador = 12;
+        }
+        else
+        {
+            manoJugador += carta[1]+1;
+        }
+        cout << "Escoge el valor del As: 1 u 11";
+        cin >> valorAs;
+        switch(valorAs)
+        {
+        case 1:
+            manoJugador += 1;
+            cout << "Total: " << manoJugador << endl;
+            break;
+        case 11:
+            manoJugador += 11;
+            cout << "Total: " << manoJugador << endl;
+            break;
+        }
     }
     else
     {
-        manoJugador += carta[1]+1;
+        if(carta[1]+1 > 10)
+        {
+            manoJugador += 10;
+        }
+        else if(carta[1]+1 == 1)
+        {
+            cout << "Escoge el valor del As: 1 u 11";
+            cin >> valorAs;
+            switch(valorAs)
+            {
+            case 1:
+                manoJugador += 1;
+                cout << "Total: " << manoJugador << endl;
+                break;
+            case 11:
+                manoJugador += 11;
+                cout << "Total: " << manoJugador << endl;
+                break;
+            }
+        }
+        else
+        {
+            manoJugador += carta[1]+1;
+        }
+        imprimirCartas();
     }
-    imprimirCartas();
     cout << "Total: " << manoJugador << endl;
+    cout << endl;
 }
