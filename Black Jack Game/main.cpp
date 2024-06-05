@@ -18,41 +18,52 @@ Proyecto Final
 
 using namespace std;
 
-int respuestaInicio;
+int respuestaInicio, respuestaMenu;
 int baraja[4][13] = {};
 int manoCrupier = 0, manoJugador = 0;
+int valueCart=0;
 
 void generarBaraja();
 void generarCartas();
 void reglasJuego();
+void startGame();
 
 int main()
 {
-    cout<<" Bienvenido a Black Jack!"<<endl;
-    cout<<"---------------------------"<<endl;
-    cout<<"[1]Partida Rapida"<<endl;
-    cout<<"[2]Reglamento"<<endl;
-    cout<<"[3]Salir del juego"<<endl;
-    cin>>respuestaInicio;
+    do{
+        cout<<" Bienvenido a Black Jack!"<<endl;
+        cout<<"---------------------------"<<endl;
+        cout<<"[1]Partida Rapida"<<endl;
+        cout<<"[2]Reglamento"<<endl;
+        cout<<"[3]Salir del juego"<<endl;
+        cin>>respuestaInicio;
 
-    switch(respuestaInicio)
-    {
-        case 1:
-            cout<<"Se inicio la partida"<<endl;
 
-            break;
+        switch(respuestaInicio)
+        {
+            case 1:
+                cout<<"Se inicio la partida"<<endl;
+                generarBaraja();
+                startGame();
 
-        case 2:
-            reglasJuego();
-            break;
 
-        case 3:
-            cout<<"*Saliste del juego*";
-            exit (0);
-            break;
+                break;
 
-    }
-    generarBaraja();
+            case 2:
+                reglasJuego();
+                break;
+
+            case 3:
+                cout<<"*Saliste del juego*";
+                exit (0);
+                break;
+
+        }
+
+
+        cout<<"Quieres volver al menu? 1)MENU  2)SALIR"<<endl;
+        cin>>respuestaMenu;
+    }while(respuestaMenu==1);
 
 
 }
@@ -116,4 +127,31 @@ void reglasJuego()
     cout<<"    Si el jugador tiene una mano más cercana a 21 que el crupier sin pasarse, gana y recibe un pago."<<endl;
     cout<<"    Si el crupier se pasa de 21 (""busto""), todos los jugadores que no se pasaron ganan automáticamente."<<endl;
     cout<<"    Si la mano del jugador y la del crupier tienen el mismo valor, es un empate (""push"")."<<endl;
+}
+///se suman los puntos de el jugador
+int puntosPlayer(int valueCart)
+{
+    manoJugador+=valueCart;
+    return manoJugador;
+}
+///se suman los puntos del Crupier
+int puntosCrupier(int valueCart)
+{
+    manoCrupier+=valueCart;
+    return manoCrupier;
+}
+
+///funcion que inicia la partida
+void startGame()
+{
+    cout<<"Player"<<endl;
+    cout<<"*******"<<endl;
+
+    cout<<"Puntos totales de Player"<< puntosPlayer(valueCart)<<endl;
+
+    cout<<"Casa"<<endl;
+    cout<<"*******"<<endl;
+
+    cout<<"Puntos totales de Crupier"<< puntosCrupier(valueCart)<<endl;
+
 }
