@@ -1,3 +1,17 @@
+/*******************************************************************************
+            CESAR Gregorio Palma Venegas
+            Jorge Luis Leggis Romero
+        INGENIERIA DE SOFTWARE TM-A
+Creacion de juego de Black jack
+Proyecto Final
+    |||||||||||||
+    |           |
+    |   0   0   |
+    |           |
+    |   |---|   |
+    |           |
+    |||||||||||||
+*******************************************************************************/
 #include <iostream>
 
 using namespace std;
